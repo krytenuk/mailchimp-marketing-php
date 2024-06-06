@@ -205,6 +205,17 @@ class Configuration
         $this->verifiedDomains = new VerifiedDomainsApi($this);
     }
 
+    public function __get(string $name)
+    {
+        if (property_exists($this, $name) &&
+            is_object($this->$name) &&
+            substr(get_class($this->$name), -3) === 'Api'
+        ) {
+            return $this->$name;
+        }
+        return null;
+    }
+
     public function setConfig($config = array()): Configuration
     {
         $apiKey = $config['apiKey'] ?? '';
